@@ -17,6 +17,7 @@ serde = { workspace = true }
 uuid = { workspace = true }
 convert_case = { workspace = true }
 nom = { workspace = true }
+surrealdb = { workspace = true }
 
 surreal-query-builder = { workspace = true }
 proc-macros-helpers = { workspace = true }

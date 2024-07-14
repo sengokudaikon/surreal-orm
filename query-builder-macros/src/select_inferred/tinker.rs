@@ -1,3 +1,4 @@
+
 use serde::{Serialize, Deserialize};
 use surrealdb::sql;
 // struct User;
@@ -7,6 +8,11 @@ struct SelectionMeta {
     variables_interpolated: String, // Tokenstream
 }
 
+pub struct WakeUp;
+
+fn err() {
+    // "".
+}
 struct Coordinates;
 // SELECT * FROM person WHERE ->knows->person->(knows WHERE influencer = true) TIMEOUT 5s;
 select_infer!(PersonSelect, "SELECT * person", {

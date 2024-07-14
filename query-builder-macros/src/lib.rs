@@ -12,6 +12,7 @@ use syn::{parse_macro_input, LitStr};
 mod query;
 mod query_builder;
 mod statement_parser;
+mod select_inferred;
 
 /// Checks a query at compile time and returns the query as a string.
 /// Unlike, query! macro, this macro does not allow variable interpolation.
