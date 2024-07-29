@@ -14,6 +14,7 @@ proc-macro-crate = { workspace = true }
 syn = { workspace = true }
 quote = { workspace = true }
 serde = { workspace = true }
+serde_json = { workspace = true }
 uuid = { workspace = true }
 convert_case = { workspace = true }
 nom = { workspace = true }

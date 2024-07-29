@@ -7,33 +7,33 @@ struct SelectionMeta {
     variables_interpolated: String, // Tokenstream
 }
 
-struct Coordinates;
-// SELECT * FROM person WHERE ->knows->person->(knows WHERE influencer = true) TIMEOUT 5s;
-select_infer!(PersonSelect, "SELECT * person", {
-    person: Person
-});
-
-#[derive(Serialize, Deserialize)]
-struct PersonSelect {
-    #[serde(flatten)]
-    person: Person,
-}
-
-
-select_infer!(User, "SELECT *, name, age, address.coordinates AS coordinates FROM person
-WHERE ->knows->person->(knows WHERE influencer = $influencer) TIMEOUT 5s
-", {
-    coorinates: Coordinates
-})
-
-#[derive(Serialize, Deserialize)]
-struct User {
-    #[serde(flatten)]
-    person: Person,
-    name: serde_json::Value,
-    age: serde_json::Value,
-    coordinates: Coordinates,
-}
+// struct Coordinates;
+// // SELECT * FROM person WHERE ->knows->person->(knows WHERE influencer = true) TIMEOUT 5s;
+// select_infer!(PersonSelect, "SELECT * person", {
+//     person: Person
+// });
+//
+// #[derive(Serialize, Deserialize)]
+// struct PersonSelect {
+//     #[serde(flatten)]
+//     person: Person,
+// }
+//
+//
+// select_infer!(User, "SELECT *, name, age, address.coordinates AS coordinates FROM person
+// WHERE ->knows->person->(knows WHERE influencer = $influencer) TIMEOUT 5s
+// ", {
+//     coorinates: Coordinates
+// })
+//
+// #[derive(Serialize, Deserialize)]
+// struct User {
+//     #[serde(flatten)]
+//     person: Person,
+//     name: serde_json::Value,
+//     age: serde_json::Value,
+//     coordinates: Coordinates,
+// }
 
 trait ToValue {
     fn to_value(self) -> sql::Value;
@@ -51,9 +51,9 @@ struct Variables<'a> {
     influencer: &'a dyn ToValue,
 }
 
-impl User {
-    pub fn select(variables: String)
-}
+// impl User {
+//     pub fn select(variables: String)
+// }
 
 // SELECT name FROM person WITH NOINDEX WHERE job = 'engineer' AND gender = 'm';
 // SELECT * FROM person WITH INDEX ft_email WHERE email = 'tobie@surrealdb.com' AND company = 'SurrealDB';
