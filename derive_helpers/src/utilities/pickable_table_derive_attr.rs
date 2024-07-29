@@ -6,7 +6,7 @@
  */
 
 use super::ident::{FieldAttribute, FieldIdentNormalizedDeserialized};
-use crate::models::{CaseString, ExtractorResult, Rename, StructGenerics, StructLevelCasing};
+use crate::models::{CaseString, ExtractorResult, Rename, StructGenerics, StructIdent, StructLevelCasing};
 
 use darling::{ast::Data, util, FromDeriveInput};
 use proc_macro2::TokenStream;
@@ -61,8 +61,8 @@ impl TableDeriveAttributesPickable {
         let mut meta = PickableMetadata::default();
 
         for field_attr in fields {
-            let f = field_attr.field_ident_normalized_deserialized_rawable(&struct_casing_de)?;
-            meta.field_name_normalized_deserialized.push(f);
+            let field_ident_norm = field_attr.field_ident_normalized_deserialized_rawable(&struct_casing_de)?;
+            meta.field_name_normalized_deserialized.push(field_ident_norm);
             meta.field_type.push(&field_attr.ty);
         }
 
@@ -70,20 +70,29 @@ impl TableDeriveAttributesPickable {
     }
 }
 
-impl ToTokens for TableDeriveAttributesPickable {
+trait PickableToken {
+    fn casing(&self) -> ExtractorResult<StructLevelCasing>;
+
+    fn get_meta(&self) -> ExtractorResult<PickableMetadata>;
+}
+
+
+struct PickableMeta<'a> {
+    struct_name: &'a Ident,
+    struct_generics: &'a StructGenerics,
+    pickable_metadata: &'a PickableMetadata<'a>,
+}
+
+impl<'a> ToTokens for PickableMeta<'a> {
     fn to_tokens(&self, tokens: &mut TokenStream) {
-        let table_derive_attributes = self;
-        let struct_name_ident = &table_derive_attributes.ident;
+        let pickable_meta = self;
+        let struct_name_ident = &pickable_meta.struct_name;
         let (struct_impl_generics, struct_ty_generics, struct_where_clause) =
-            &table_derive_attributes.generics.split_for_impl();
-        let meta = match table_derive_attributes.get_meta() {
-            Ok(meta) => meta,
-            Err(err) => return tokens.extend(err.write_errors()),
-        };
+            &pickable_meta.struct_generics.split_for_impl();
         let PickableMetadata {
             field_name_normalized_deserialized,
             field_type,
-        } = meta;
+        } = &pickable_meta.pickable_metadata;
 
         let pickable_name = format_ident!("{struct_name_ident}Pickable");
         tokens.extend(quote!(
@@ -100,6 +109,27 @@ impl ToTokens for TableDeriveAttributesPickable {
                 ) *
             }
 
+        ));
+    }
+}
+
+impl ToTokens for TableDeriveAttributesPickable {
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        let table_derive_attributes = self;
+        let meta = match table_derive_attributes.get_meta() {
+            Ok(meta) => meta,
+            Err(err) => return tokens.extend(err.write_errors()),
+        };
+
+        let pickable_meta = PickableMeta {
+            struct_name: &table_derive_attributes.ident,
+            struct_generics: &table_derive_attributes.generics,
+            pickable_metadata: &meta,
+        };
+
+        // tokens.extend(pickable_meta.into_token_stream());
+        tokens.extend(quote!(
+            #pickable_meta
         ));
     }
 }

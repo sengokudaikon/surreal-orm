@@ -17,6 +17,12 @@ macro_rules! create_ident_wrapper {
             }
         }
 
+        impl ::std::fmt::Display for $ident {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+                self.0.fmt(f)
+            }
+        }
+
         impl ::darling::FromMeta for $ident {
             fn from_expr(expr: &::syn::Expr) -> ::darling::Result<Self> {
                 match expr {
