@@ -44,14 +44,14 @@ impl FieldAttribute {
         &self,
         struct_casing: &StructLevelCasing,
     ) -> ExtractorResult<FieldIdentNormalizedDeserialized> {
-        Ok(self.ident_meta_deserialized(struct_casing)?.0)
+        Ok(self.ident_meta_serialized(struct_casing)?.0)
     }
 
     pub fn field_name_normaized_de_no_raw(
         &self,
         struct_casing: &StructLevelCasing,
     ) -> ExtractorResult<DeserializedFieldName> {
-        Ok(self.ident_meta_deserialized(struct_casing)?.1)
+        Ok(self.ident_meta_serialized(struct_casing)?.1)
     }
 
     pub fn field_name_pascalized(
@@ -72,7 +72,7 @@ impl FieldAttribute {
         Ok(field_name_pascalized.into())
     }
 
-    fn ident_meta_deserialized(
+    fn ident_meta_serialized(
         &self,
         struct_casing: &StructLevelCasing,
     ) -> ExtractorResult<(FieldIdentNormalizedDeserialized, DeserializedFieldName)> {
