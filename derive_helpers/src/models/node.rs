@@ -7,7 +7,7 @@
 
 use std::ops::Deref;
 
-use crate::models::*;
+use crate::{models::*, utilities::PickableMeta};
 use darling::{FromDeriveInput, ToTokens};
 use proc_macro2::TokenStream;
 use proc_macros_helpers::get_crate_name;
@@ -45,6 +45,7 @@ impl ToTokens for NodeToken {
             Err(err) => return tokens.extend(err.write_errors()),
         };
         let table_str = table_ident.as_string();
+
         let VariablesModelMacro {
             __________connect_node_to_graph_traversal_string,
             ___________graph_traversal_string,
@@ -96,6 +97,13 @@ impl ToTokens for NodeToken {
             field_metadata,
             ..
         } = &code_gen;
+
+        let pickable_meta = PickableMeta {
+            struct_name: &table_derive_attributes.ident,
+            struct_generics: &table_derive_attributes.generics,
+            field_ident_normalized: &serializable_fields,
+            field_type: &meta.field_type,
+        };
 
         let imports_referenced_node_schema =
             imports_referenced_node_schema.iter().collect::<Vec<_>>();

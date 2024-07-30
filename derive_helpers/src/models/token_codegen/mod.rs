@@ -21,7 +21,7 @@ use convert_case::{Case, Casing};
 use quote::format_ident;
 use std::collections::HashSet;
 
-use crate::models::*;
+use crate::{models::*, utilities::PickableMeta};
 
 use self::{
     field_value_setter::FieldSetterImplTokens,
@@ -289,11 +289,42 @@ impl<'a> Codegen<'a> {
         self.table_derive_attributes().to_data_type()
     }
 
+    pub(crate) fn pickable_meta(&self) -> ExtractorResult<PickableMeta> {
+        let table_attrs = self.table_derive_attributes();
+        let ident = table_attrs.ident();
+        let generics = table_attrs.generics();
+        let field_receiver = self.field_receiver();
+
+        let field_ident_normalized =
+            field_receiver.field_ident_normalized(&table_attrs.casing()?)?;
+        let mut field_names = Vec::new();
+        let mut field_types = Vec::new();
+
+        for field in table_attrs.fields()? {
+            let field_name = field.field_ident_normalized(&table_attrs.casing()?)?;
+            let field_type = field.ty();
+            field_names.push(field_name);
+            field_types.push(field_type);
+        }
+
+        // let (field_names, field_types) = (field_names, field_types);
+
+        let pickable_meta = PickableMeta {
+            struct_name: ident.into(),
+            struct_generics: generics.clone(),
+            field_ident_normalized: field_names,
+            field_type: field_types,
+        };
+
+        Ok(pickable_meta)
+    }
+
     /// Derive the schema properties for a struct
     pub(crate) fn parse_fields(model_attributes: &'a ModelAttributes<'a>) -> ExtractorResult<Self> {
         let mut tokens_generator = Self::new(model_attributes);
 
         for field_receiver in model_attributes.fields()? {
+            // field_receiver.field_ident_normalized(jj)
             tokens_generator.set_field_receiver(field_receiver);
 
             tokens_generator.create_table_id_type_token()?;
