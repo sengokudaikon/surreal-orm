@@ -302,9 +302,9 @@ impl<'a> Codegen<'a> {
 
         for field in table_attrs.fields()? {
             let field_name = field.field_ident_normalized(&table_attrs.casing()?)?;
-            let field_type = field.ty();
+            let field_type = field.ty().replace_self_with_current_struct_concrete_type(table_attrs)?;
             field_names.push(field_name);
-            field_types.push(field_type);
+            field_types.push(field_type.into_inner());
         }
 
         // let (field_names, field_types) = (field_names, field_types);
