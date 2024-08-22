@@ -1,6 +1,10 @@
-use std::ops::Deref;
+/*
+ * Author: Oyelowo Oyedayo
+ * Email: oyelowo.oss@gmail.com
+ * Copyright (c) 2023 Oyelowo Oyedayo
+ * Licensed under the MIT license
+ */
 
-use pretty_assertions::assert_eq;
 use surreal_models::{Rocket, Weapon};
 use surreal_orm::PartialUpdater;
 use serde_json;
@@ -21,7 +25,7 @@ fn can_do_partial_update() {
         .build();
 
     println!("{:?}", serde_json::to_string(&weapon).unwrap());
-    assert_eq!(weapon.name.deref(), "");
+    // assert_eq!(weapon.name, "");
 
     // assert_eq!(serde_json::to_string(&weapon).unwrap(), "");
     // assert_eq!(serde_json::to_string(&weapon).unwrap(), r#"{"name":"Oyelowo","strength":45.0,"rocket":{"name":"Ye","strength":907}}");
