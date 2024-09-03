@@ -98,12 +98,12 @@ impl ToTokens for NodeToken {
             ..
         } = &code_gen;
 
-        let pickable_meta = PickableMeta {
-            struct_name: &table_derive_attributes.ident,
-            struct_generics: &table_derive_attributes.generics,
-            field_ident_normalized: &serializable_fields,
-            field_type: &meta.field_type,
-        };
+        // let pickable_meta = PickableMeta {
+        //     struct_name: &table_derive_attributes.ident,
+        //     struct_generics: &table_derive_attributes.generics,
+        //     field_ident_normalized: &serializable_fields,
+        //     field_type: &meta.field_type,
+        // };
 
         let imports_referenced_node_schema =
             imports_referenced_node_schema.iter().collect::<Vec<_>>();
