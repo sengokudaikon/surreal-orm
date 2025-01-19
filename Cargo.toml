@@ -24,8 +24,9 @@ members = [
 version = "1.0.0"
 edition = "2021"
 authors = ["Oyelowo Oyedayo"]
-description = "One codebase to rule them all"
-documentation = "https://codebreather.com/oyelowo"
+description = "Powerful & expressive ORM/query-builder/static checker for raw queries/Fully Automated migration tooling , designed to offer an intuitive API, strict type-checking, novel features, & full specification support. It provides a fresh perspective in data management. Currently supports SurrealDB engine. RDMSs(PG, MYSQL etc) and others coming soon"
+documentation = "docs.rs/surreal_orm"
+# documentation = "https://codebreather.com/oyelowo"
 
 
 [workspace.dependencies]
