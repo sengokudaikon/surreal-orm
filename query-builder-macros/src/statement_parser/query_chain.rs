@@ -51,7 +51,7 @@ impl QueriesChainParser {
     pub fn _is_definitely_query_block(&self) -> bool {
         let last_stmt = self.statements.last();
 
-        last_stmt.map_or(false, |s| s.is_return_statement())
+        last_stmt.is_some_and(|s| s.is_return_statement())
     }
 
     pub fn is_likely_query_block(&self) -> bool {

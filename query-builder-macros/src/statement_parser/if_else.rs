@@ -170,7 +170,7 @@ impl IfElseWithoutIfKeywordMetaAst {
             || self
                 .else_meta
                 .as_ref()
-                .map_or(false, |else_meta| else_meta.body.has_return_statement())
+                .is_some_and(|else_meta| else_meta.body.has_return_statement())
     }
 }
 
